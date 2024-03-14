@@ -303,7 +303,14 @@ actor {
     /////////////////
     // PROJECT #5 //
     ///////////////
-    let logo : Text = "";
+    let logo : Text = "<svg xmlns='http://www.w3.org/2000/svg' xml:space='preserve' width='655.359' height='655.359' style='shape-rendering:geometricPrecision;text-rendering:geometricPrecision;image-rendering:optimizeQuality;fill-rule:evenodd;clip-rule:evenodd' viewBox='0 0 6.827 6.827'><defs><style>.fil1{fill:#fffffe;fill-rule:nonzero}</style></defs>
+    <path style='fill:#424242' d='M0 0h6.827v6.827H0z'/><g id='Layer_x0020_1'><path class='fil1' d='m2.246 2.54 1.147-.474a.106.106 0 0 1 .089.003l1.146.475-.04.099.04-.099a.107.107 0 0 1-.042.205H2.279a.107.107 0 0 1-.033-.208zm1.187-.26-.619.256h1.239l-.62-.257z'/>
+    <path class='fil1' d='M2.615 2.692v2.003h-.213V2.692zM4.465 2.692v2.003h-.213V2.692zM2.27 4.923h2.327v.213H2.27zM2.158 5.238h2.55v.213h-2.55z'/>
+    <path class='fil1' d='M4.395 3.221h1.578v1.597H.854V3.221H2.57v.214H1.067v1.17H5.76v-1.17H4.395z'/>
+    <path class='fil1' d='M4.801 3.643v.324h-.213v-.324zM5.172 3.643v.324H4.96v-.324zM5.543 3.643v.324H5.33v-.324zM4.801 4.072v.324h-.213v-.324zM5.172 4.072v.324H4.96v-.324zM5.543 4.072v.324H5.33v-.324zM1.497 3.643v.324h-.214v-.324zM1.868 3.643v.324h-.214v-.324zM2.239 3.643v.324h-.214v-.324zM1.497 4.072v.324h-.214v-.324zM1.868 4.072v.324h-.214v-.324zM2.239 4.072v.324h-.214v-.324zM3.482 1.482a.053.053 0 0 0-.107 0V2.1a.053.053 0 0 0 .107 0v-.618z'/>
+    <path class='fil1' d='M3.375 1.573h-.32l.04.083h.28v-.083zm-.406-.107h.46c.03 0 .053.024.053.054v.189c0 .03-.024.053-.053.053h-.366c-.02 0-.04-.01-.05-.03l.049-.023-.048.023-.09-.185a.053.053 0 0 1 .045-.081z'/><g id='_509265704'>
+    <path id='_509267024' class='fil1' d='M3.166 2.644v2.081h-.214V2.644z'/>
+    <path id='_509266688' class='fil1' d='M3.914 2.644v2.081h-.213V2.644z'/></g></g><path style='fill:none' d='M0 0h6.827v6.827H0z'/></svg>";
 
     func _getWebpage() : Text {
         var webpage = "<style>" #
@@ -333,20 +340,20 @@ actor {
 
     public query func getStats() : async DAOStats {
         return ({
-            name = "";
-            manifesto = "";
-            goals = [];
-            members = [];
-            logo = "";
-            numberOfMembers = 0;
+            name = name;
+            manifesto = manifesto;
+            goals = Buffer.toArray(goals);
+            members = Iter.toArray(Iter.map<Member, Text>(members.vals(), func(member : Member) { member.name }));
+            logo = logo;
+            numberOfMembers = members.size();
         });
     };
 
-    public func http_request(request : HttpRequest) : async HttpResponse {
+    public query func http_request(request : HttpRequest) : async HttpResponse {
         return ({
-            status_code = 404;
-            headers = [];
-            body = Blob.fromArray([]);
+            status_code = 200;
+            headers = [("Content-Type", "text/html; charset=UTF-8")];
+            body = Text.encodeUtf8(_getWebpage());
             streaming_strategy = null;
         });
     };

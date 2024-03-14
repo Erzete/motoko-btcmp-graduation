@@ -18,13 +18,13 @@ actor MBToken {
     return "MBT";
   };
 
-  public func mint(owner : Principal, amount : Nat) : async Result<(), Text> {
+  public shared func mint(owner : Principal, amount : Nat) : async Result<(), Text> {
     let balance = Option.get(Map.get<Principal, Nat>(ledger, phash, owner), 0);
     Map.set<Principal, Nat>(ledger, phash, owner, balance + amount);
     return #ok();
   };
 
-  public func burn(owner : Principal, amount : Nat) : async Result<(), Text> {
+  public shared func burn(owner : Principal, amount : Nat) : async Result<(), Text> {
     let balance = Option.get(Map.get<Principal, Nat>(ledger, phash, owner), 0);
     if (balance < amount) {
       return #err("Insufficient balance to burn");
@@ -37,7 +37,7 @@ actor MBToken {
     return Option.get(Map.get<Principal, Nat>(ledger, phash, owner), 0);
   };
 
-  public query func balanceOfArray(owners : [Principal]) : async [Nat] {
+  public shared query func balanceOfArray(owners : [Principal]) : async [Nat] {
     var balances = Buffer.Buffer<Nat>(0);
     for (owner in owners.vals()) {
         balances.add(Option.get(Map.get<Principal, Nat>(ledger, phash, owner), 0));

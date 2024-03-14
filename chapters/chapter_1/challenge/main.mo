@@ -1,22 +1,27 @@
-actor {
+import Buffer "mo:base/Buffer";
+
+actor class DAO() {
+    let name : Text = "Actually Matters DAO";
+    var manifesto : Text = "Making sure that the DAO actually matters to everyone in the world";
+    var goals : Buffer.Buffer<Text> = Buffer.Buffer<Text>(0);
 
     public shared query func getName() : async Text {
-        return "Not implemented";
+        return name;
     };
 
     public shared query func getManifesto() : async Text {
-        return "Not implemented";
+        return manifesto;
     };
 
     public func setManifesto(newManifesto : Text) : async () {
-        return;
+        manifesto := newManifesto;
     };
 
     public func addGoal(newGoal : Text) : async () {
-        return;
+        goals.add(newGoal);
     };
 
     public shared query func getGoals() : async [Text] {
-        return [];
+        return Buffer.toArray(goals);
     };
 };
